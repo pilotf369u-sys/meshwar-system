@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم زبون مشوار</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header-card { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .wallet-box { background: rgba(255, 255, 255, 0.15); padding: 15px; border-radius: 8px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-deposit { background-color: #f1c40f; color: #2c3e50; padding: 10px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; text-decoration: none; }
+        .shipment-card { background: white; padding: 20px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-right: 5px solid #f1c40f; }
+        .status-badge { background-color: #e1f5fe; color: #0288d1; padding: 6px 12px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; margin-top: 5px; }
+        .video-box { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .ads-placeholder { background: #fdfefe; border: 1px dashed #ccc; padding: 15px; text-align: center; color: #999; font-size: 12px; margin-top: 15px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 💳 كارت الترحيب والمحفظة الرقمية لقفل الحوالات اليدوية -->
+    <div class="header-card">
+        <h2>مرحباً بك في منصة مشوار 👋</h2>
+        <div class="wallet-box">
+            <div>
+                <span>رصيدك المتاح حالياً:</span>
+                <h3 style="margin: 5px 0 0 0;">{{ customer.customerwallet.available_balance }}$</h3>
+            </div>
+            <!-- زر الانتقال لرفع إيصال الحوالة الفورية -->
+            <a href="/upload-receipt/" class="btn-deposit">➕ شحن المحفظة بالحوالة</a>
+        </div>
+        <p style="margin: 10px 0 0 0; font-size: 14px;">🏅 نقاط المكافآت والولاء: {{ customer.customerwallet.reward_points }} نقطة</p>
+    </div>
+
+    <!-- 📺 مساحة الفيديو التعليمي لشرح طريقة التسجيل والطلب -->
+    <div class="video-box">
+        <h3>📖 فيديو تعليمي: كيف تطلب وتشحن طرودك معنا؟</h3>
+        <div class="video-wrapper">
+            <!-- سيتم تبديل الرابط برابط فيديو الشرح الخاص بك لاحقاً -->
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- ✈️ قائمة تتبع حركات الطلبات والشحنات بالحالات الـ 9 -->
+    <h3>📦 تتبع شحناتك الحالية والأخيرة:</h3>
+    
+    {% for shipment in shipments %}
+    <div class="shipment-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong>باركود الشحنة: #{{ shipment.tracking_number }}</strong>
+            <span style="color: #27ae60; font-weight: bold;">{{ shipment.final_cost }}$</span>
+        </div>
+        <p style="margin: 10px 0 5px 0; color: #666;">⚖️ الوزن الفعلي: {{ shipment.weight_kg }} كغم</p>
+        
+        <!-- حالة الشحنة المحدثة بالباركود من قبل موظفيك -->
+        <div class="status-badge">
+            {{ shipment.get_current_status_display }}
+        </div>
+
+        <!-- 💵 مساحة إعلانات جوجل غير المزعجة المدمجة داخل الصفحة -->
+        {% if shipment.show_ads %}
+        <div class="ads-placeholder">
+            ✨ مساحة إعلانية مدمجة لـ Google AdSense (تظهر بشكل غير مزعج للزبون) ✨
+        </div>
+        {% endif %}
+    </div>
+    {% empty %}
+    <p style="text-align: center; color: #777;">ليست لديك أي شحنات مسجلة حالياً في النظام.</p>
+    {% endfor %}
+</div>
+
+</body>
+</html>
