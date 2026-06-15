@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شحن المحفظة بالحوالة - مشوار</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; }
+        .form-card { max-width: 500px; margin: 40px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { color: #1e3c72; text-align: center; margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #444; }
+        input[type="text"], input[type="number"], select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        input[type="file"] { display: block; margin-top: 5px; }
+        .btn-submit { width: 100%; padding: 12px; background-color: #27ae60; border: none; border-radius: 6px; color: white; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-submit:hover { background-color: #219653; }
+        .back-link { display: block; text-align: center; margin-top: 15px; color: #777; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="form-card">
+    <h2>➕ إرسال إيصال حوالة مالية</h2>
+    
+    <form method="POST" enctype="multipart/form-data">
+        
+        <div class="form-group">
+            <label for="amount">المبلغ المحوّل بالدولار ($):</label>
+            <input type="number" id="amount" name="amount" min="1" step="0.01" required placeholder="مثال: 500">
+        </div>
+
+        <div class="form-group">
+            <label for="method">الحساب أو الشخص الذي حوّلت إليه:</label>
+            <select id="method" name="method" required>
+                <option value="">-- اختر الحساب المستلم --</option>
+                <option value="حساب الشركة البنكي الرئيسي">حساب شركة مشوار البنكي الرئيسي</option>
+                <option value="حوالة باسم موظف الفرع في أنقرة">حوالة يدوية باسم موظف أنقرة</option>
+                <option value="محفظة كاش المعتمدة للشركة">محفظة كاش المعتمدة للشركة</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="receipt_image">إرفاق صورة إيصال أو وصل الحوالة:</label>
+            <input type="file" id="receipt_image" name="receipt_image" accept="image/*" required>
+        </div>
+
+        <button type="submit" class="btn-submit">تأكيد وإرسال للإدارة 🚀</button>
+    </form>
+
+    <a href="/dashboard/" class="back-link">↩️ العودة للوحة التحكم</a>
+</div>
+
+</body>
+</html>
