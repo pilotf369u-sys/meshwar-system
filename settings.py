@@ -28,7 +28,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# تم تعديله ليتوافق مع وجود ملف urls.py في المجلد الرئيسي
 ROOT_URLCONF = 'urls'
 
 TEMPLATES = [
@@ -47,7 +46,6 @@ TEMPLATES = [
     },
 ]
 
-# تم تعديله ليتوافق مع وجود ملف wsgi.py في المجلد الرئيسي
 WSGI_APPLICATION = 'wsgi.application'
 
 DATABASES = {
