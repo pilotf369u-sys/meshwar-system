@@ -2,10 +2,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# --- إعدادات التطبيق ---
-class Meta:
-    app_label = 'meshwar_system'
-
 # 1. الموظفون
 class EmployeeProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="الموظف")
@@ -75,7 +71,7 @@ class WalletTransaction(models.Model):
     class Meta:
         app_label = 'meshwar_system'
 
-# 6. الشحنات (كل الميزات موجودة)
+# 6. الشحنات
 class Shipment(models.Model):
     customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, verbose_name="صاحب الشحنة")
     tracking_number = models.CharField(max_length=100, unique=True, verbose_name="رقم التتبع")
