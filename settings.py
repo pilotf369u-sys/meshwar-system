@@ -15,6 +15,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apps.MeshwarConfig', # أضف هذا السطر
 ]
 
 MIDDLEWARE = [
