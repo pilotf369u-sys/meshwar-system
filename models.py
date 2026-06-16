@@ -25,8 +25,8 @@ class CustomerProfile(models.Model):
     COUNTRY_CHOICES = [('Turkey', 'تركيا'), ('Iraq', 'العراق')]
     
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="حساب الزبون")
-    current_country = models.CharField(max_digits=50, choices=COUNTRY_CHOICES, verbose_name="بلد الإقامة الحالي")
-    city_province = models.CharField(max_digits=100, verbose_name="المحافظة / الولاية")
+    current_country = models.CharField(max_length=50, choices=COUNTRY_CHOICES, verbose_name="بلد الإقامة الحالي")
+    city_province = models.CharField(max_length=100, verbose_name="المحافظة / الولاية")
     address_details = models.TextField(verbose_name="العنوان التفصيلي")
 
     def __str__(self):
@@ -40,7 +40,7 @@ class CustomerWallet(models.Model):
     def __str__(self):
         return f"محفظة {self.customer.user.username} - الرصيد: {self.available_balance}$"
 
-# 4. نظام الحوالات اليدوية (الفيزا أو حساب الموظف) برفع الإيصال
+# 4. نظام الحوالات اليدوية
 class WalletDepositRequest(models.Model):
     STATUS_CHOICES = [
         ('Pending', 'بانتظار مراجعة الموظف وتأكيد التحويل ⏳'),
@@ -50,20 +50,20 @@ class WalletDepositRequest(models.Model):
     customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, verbose_name="الزبون")
     amount_requested = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="المبلغ المحول ($)")
     receipt_image = models.ImageField(upload_to='receipts/', verbose_name="صورة وصل الحوالة")
-    payment_method_used = models.CharField(max_digits=150, verbose_name="الحساب أو الموظف المحول إليه")
-    status = models.CharField(max_digits=50, choices=STATUS_CHOICES, default='Pending', verbose_name="حالة الطلب")
+    payment_method_used = models.CharField(max_length=150, verbose_name="الحساب أو الموظف المحول إليه")
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='Pending', verbose_name="حالة الطلب")
     admin_notes = models.TextField(blank=True, null=True, verbose_name="ملاحظات الإدارة")
     created_at = models.DateTimeField(auto_now_add=True)
 
-# 5. سجل الحركات المالي التاريخي للمحفظة
+# 5. سجل الحركات المالي
 class WalletTransaction(models.Model):
     wallet = models.ForeignKey(CustomerWallet, on_delete=models.CASCADE, related_name='transactions')
-    transaction_type = models.CharField(max_digits=50, choices=[('Deposit', 'إيداع'), ('Shipping_Payment', 'أجور شحن')])
+    transaction_type = models.CharField(max_length=50, choices=[('Deposit', 'إيداع'), ('Shipping_Payment', 'أجور شحن')])
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    description = models.CharField(max_digits=255)
+    description = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-# 6. نظام الشحنات المركزي (مراحل الحالات الـ 9، التحكم بالسعر، الباركود، الفيديوهات)
+# 6. نظام الشحنات المركزي
 class Shipment(models.Model):
     STATUS_STAGES = [
         ('1_received_ankara', '1. استلام الطرد في مستودع أنقرة 🏢'),
@@ -78,20 +78,14 @@ class Shipment(models.Model):
     ]
 
     customer = models.ForeignKey(CustomerProfile, on_delete=models.CASCADE, verbose_name="صاحب الشحنة")
-    tracking_number = models.CharField(max_digits=100, unique=True, verbose_name="رقم التتبع الموحد (الباركود)")
+    tracking_number = models.CharField(max_length=100, unique=True, verbose_name="رقم التتبع الموحد (الباركود)")
     weight_kg = models.DecimalField(max_digits=6, decimal_places=2, verbose_name="الوزن الحقيقي (كغم)")
-    
-    # التحكم المالي المرن بالأسعار
     base_shipping_cost = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="التكلفة الأساسية ($)")
     adjustment_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="تعديل السعر بالزيادة أو النقصان ($)")
-    
-    current_status = models.CharField(max_digits=50, choices=STATUS_STAGES, default='1_received_ankara', verbose_name="حالة الشحنة الحالية")
+    current_status = models.CharField(max_length=50, choices=STATUS_STAGES, default='1_received_ankara', verbose_name="حالة الشحنة الحالية")
     assigned_courier = models.ForeignKey(Courier, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="المندوب المحلي الموجه إليه")
-    
-    # مساحة الفيديو والإعلانات
     instructional_video_url = models.URLField(blank=True, null=True, verbose_name="رابط فيديو اليوتيوب التعليمي للشحنة")
     show_ads = models.BooleanField(default=True, verbose_name="تفعيل إعلانات جوجل غير المزعجة لهذه الصفحة")
-    
     updated_at = models.DateTimeField(auto_now=True, verbose_name="آخر تحديث للحالة")
 
     @property
