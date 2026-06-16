@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent
 
 SECRET_KEY = 'meshwar-super-secret-key-for-testing-only-123'
 DEBUG = True
-ALLOWED_HOSTS = ['*']  # السماح بفتح الموقع من أي هاتف أو كمبيوتر عبر رابط ريندر
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -15,7 +15,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
- 'meshwar_system',
+    'meshwar_system',
 ]
 
 MIDDLEWARE = [
@@ -28,6 +28,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# تم تعديله ليتوافق مع وجود ملف urls.py في المجلد الرئيسي
 ROOT_URLCONF = 'urls'
 
 TEMPLATES = [
@@ -46,7 +47,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'meshwar_project.wsgi.application'
+# تم تعديله ليتوافق مع وجود ملف wsgi.py في المجلد الرئيسي
+WSGI_APPLICATION = 'wsgi.application'
 
 DATABASES = {
     'default': {
