@@ -5,17 +5,17 @@ from django.contrib.auth.models import User
 # 1. ملف الموظفين وأرقام الواتساب المرنة
 class EmployeeProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="الموظف")
-    phone_number = models.CharField(max_digits=20, verbose_name="رقم الواتساب الفعال")
-    role = models.CharField(max_digits=50, choices=[('Admin', 'مدير عام'), ('Staff', 'موظف فرع')], verbose_name="الصلاحية")
+    phone_number = models.CharField(max_length=20, verbose_name="رقم الواتساب الفعال")
+    role = models.CharField(max_length=50, choices=[('Admin', 'مدير عام'), ('Staff', 'موظف فرع')], verbose_name="الصلاحية")
 
     def __str__(self):
         return f"{self.user.username} - {self.role}"
 
 # 2. ملف المندوبين وتوجيه الشحنات حسب المحافظة
 class Courier(models.Model):
-    name = models.CharField(max_digits=100, verbose_name="اسم المندوب المحلي")
-    phone = models.CharField(max_digits=20, verbose_name="رقم هاتفه")
-    assigned_province = models.CharField(max_digits=100, verbose_name="المحافظة المسؤول عنها")
+    name = models.CharField(max_length=100, verbose_name="اسم المندوب المحلي")
+    phone = models.CharField(max_length=20, verbose_name="رقم هاتفه")
+    assigned_province = models.CharField(max_length=100, verbose_name="المحافظة المسؤول عنها")
 
     def __str__(self):
         return f"المندوب: {self.name} ({self.assigned_province})"
