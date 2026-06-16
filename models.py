@@ -8,9 +8,6 @@ class EmployeeProfile(models.Model):
     phone_number = models.CharField(max_length=20, verbose_name="رقم الواتساب الفعال")
     role = models.CharField(max_length=50, choices=[('Admin', 'مدير عام'), ('Staff', 'موظف فرع')], verbose_name="الصلاحية")
 
-    class Meta:
-        app_label = 'meshwar_system'
-
     def __str__(self):
         return f"{self.user.username} - {self.role}"
 
@@ -19,9 +16,6 @@ class Courier(models.Model):
     name = models.CharField(max_length=100, verbose_name="اسم المندوب المحلي")
     phone = models.CharField(max_length=20, verbose_name="رقم هاتفه")
     assigned_province = models.CharField(max_length=100, verbose_name="المحافظة المسؤول عنها")
-
-    class Meta:
-        app_label = 'meshwar_system'
 
     def __str__(self):
         return f"المندوب: {self.name} ({self.assigned_province})"
@@ -33,9 +27,6 @@ class CustomerProfile(models.Model):
     city_province = models.CharField(max_length=100, verbose_name="المحافظة / الولاية")
     address_details = models.TextField(verbose_name="العنوان التفصيلي")
 
-    class Meta:
-        app_label = 'meshwar_system'
-
     def __str__(self):
         return self.user.username
 
@@ -43,9 +34,6 @@ class CustomerWallet(models.Model):
     customer = models.OneToOneField(CustomerProfile, on_delete=models.CASCADE, verbose_name="الزبون")
     available_balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="الرصيد المتاح ($)")
     reward_points = models.IntegerField(default=0, verbose_name="نقاط المكافآت")
-
-    class Meta:
-        app_label = 'meshwar_system'
 
 # 4. طلبات الإيداع
 class WalletDepositRequest(models.Model):
@@ -57,9 +45,6 @@ class WalletDepositRequest(models.Model):
     admin_notes = models.TextField(blank=True, null=True, verbose_name="ملاحظات الإدارة")
     created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        app_label = 'meshwar_system'
-
 # 5. الحركات المالية
 class WalletTransaction(models.Model):
     wallet = models.ForeignKey(CustomerWallet, on_delete=models.CASCADE, related_name='transactions')
@@ -67,9 +52,6 @@ class WalletTransaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        app_label = 'meshwar_system'
 
 # 6. الشحنات
 class Shipment(models.Model):
@@ -83,9 +65,6 @@ class Shipment(models.Model):
     instructional_video_url = models.URLField(blank=True, null=True, verbose_name="رابط الفيديو")
     show_ads = models.BooleanField(default=True, verbose_name="تفعيل الإعلانات")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="آخر تحديث")
-
-    class Meta:
-        app_label = 'meshwar_system'
 
     @property
     def final_cost(self):
