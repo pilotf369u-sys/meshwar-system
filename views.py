@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from models import Shipment, CustomerProfile, WalletDepositRequest
+from .models import Shipment, CustomerProfile, WalletDepositRequest
 
 # 1. واجهة لوحة تحكم الزبون (التتبع، الفيديوهات، والتقييم)
 @login_required
