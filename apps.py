@@ -1,4 +1,5 @@
 from django.apps import AppConfig
 
 class MeshwarConfig(AppConfig):
-    name = '.'  # هذا يخبر دجانغو أن المجلد الحالي هو التطبيق
+    name = 'meshwar_system' # تأكد أن هذا الاسم يطابق اسم المجلد الرئيسي لمشروعك
+    label = 'meshwar_system'
