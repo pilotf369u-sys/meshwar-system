@@ -4,8 +4,11 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 
-SECRET_KEY = 'meshwar-super-secret-key-for-testing-only-123'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'meshwar-super-secret-key-for-testing-only-123')
+
+# نصيحة: عند الرفع على Render يفضل جعل DEBUG = False، ولكن سنتركها True الآن للتأكد من عمل الموقع أولاً
 DEBUG = True
+
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -15,11 +18,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.MeshwarConfig', # أضف هذا السطر
+    'apps.MeshwarConfig', 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # لدعم تشغيل الملفات الثابتة على Render
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -60,5 +64,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles' # مسار تجميع الملفات الثابتة عند الرفع
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
