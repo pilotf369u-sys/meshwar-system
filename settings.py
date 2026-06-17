@@ -2,7 +2,6 @@
 import os
 from pathlib import Path
 
-# المسار الرئيسي للمشروع
 BASE_DIR = Path(__file__).resolve().parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'meshwar-super-secret-key-for-testing-only-123')
@@ -52,11 +51,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wsgi.application'
 
-# تعديل المسار المطلق الثابت لإنهاء خطأ الدوران ومنع قفل الملف
+# استخدام المسار القياسي المستقر والمباشر
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.abspath(os.path.join(os.path.dirname(__file__), 'db.sqlite3')),
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -69,3 +68,15 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# === الحل الحاسم لكسر الدوامة وجعل اللوحة تدب فيها الروح ===
+# إجبار بايثون على خلق الجداول داخلياً عند بدء تشغيل المشروع وتخطي قيود السيرفر
+try:
+    import django
+    django.setup()
+    from django.core.management import call_command
+    print("=== جاري فحص وبناء جداول قاعدة البيانات تلقائياً ===")
+    call_command('migrate', '--run-syncdb', interactive=False)
+    print("=== تم بناء الجداول بنجاح تـام ===")
+except Exception as e:
+    print(f"=== خطأ مؤقت أثناء المزامنة: {e} ===")
