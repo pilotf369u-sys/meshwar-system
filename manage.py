@@ -6,7 +6,10 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    # توجيه النظام لقراءة ملف الإعدادات settings.py الخاص بمشروعك مباشرة
+    # إضافة المجلد الحالي لمسارات النظام ليتعرف على مشروع meshwar-system تلقائياً
+    sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+    
+    # توجيه النظام لقراءة ملف الإعدادات settings.py الخاص بك
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
     try:
         from django.core.management import execute_from_command_line
