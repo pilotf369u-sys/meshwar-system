@@ -2,10 +2,12 @@
 import os
 from pathlib import Path
 
+# المسار الرئيسي للمشروع
 BASE_DIR = Path(__file__).resolve().parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'meshwar-super-secret-key-for-testing-only-123')
 
+# تفعيل الـ Debug لرؤية الأخطاء والواجهات بوضوح أثناء ضبط السيرفر
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -22,7 +24,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', 
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # لدعم تشغيل الملفات الثابتة والألوان على Render
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -51,11 +53,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wsgi.application'
 
-# التعديل الجوهري لتوحيد المسار ومنع خطأ no such table
+# إعداد قاعدة البيانات الافتراضي والمستقر المتوافق مع بيئة البناء المغلقة لـ Render
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'apps', 'db.sqlite3'),
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
