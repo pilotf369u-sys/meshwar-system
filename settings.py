@@ -6,7 +6,6 @@ BASE_DIR = Path(__file__).resolve().parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'meshwar-super-secret-key-for-testing-only-123')
 
-# نصيحة: عند الرفع على Render يفضل جعل DEBUG = False، ولكن سنتركها True الآن للتأكد من عمل الموقع أولاً
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -23,7 +22,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # لدعم تشغيل الملفات الثابتة على Render
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -52,10 +51,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wsgi.application'
 
+# التعديل الجوهري لتوحيد المسار ومنع خطأ no such table
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'apps', 'db.sqlite3'),
     }
 }
 
@@ -65,6 +65,6 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles' # مسار تجميع الملفات الثابتة عند الرفع
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
