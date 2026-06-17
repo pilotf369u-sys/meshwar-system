@@ -51,7 +51,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wsgi.application'
 
-# استخدام المسار القياسي المستقر والمباشر
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -69,14 +68,25 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# === الحل الحاسم لكسر الدوامة وجعل اللوحة تدب فيها الروح ===
-# إجبار بايثون على خلق الجداول داخلياً عند بدء تشغيل المشروع وتخطي قيود السيرفر
+# === الحل الهندسي النهائي لإجبار الجداول على الظهور فوراً ===
 try:
     import django
     django.setup()
     from django.core.management import call_command
-    print("=== جاري فحص وبناء جداول قاعدة البيانات تلقائياً ===")
+    from django.db import connection
+    
+    # 1. المزامنة الإجبارية لتخطي ملفات الهجرة المعطوبة
     call_command('migrate', '--run-syncdb', interactive=False)
-    print("=== تم بناء الجداول بنجاح تـام ===")
+    
+    # 2. فحص صريح للتأكد من وجود الجدول الفعلي لحل المعضلة
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='apps_shipment';")
+        if not cursor.fetchone():
+            print("=== تنبيه: جدول apps_shipment مفقود، جاري تخليقه يدوياً ===")
+            # أمر طوارئ داخلي لبناء جداول تطبيق apps قسرياً
+            call_command('makemigrations', 'apps', interactive=False)
+            call_command('migrate', 'apps', interactive=False)
+            
+    print("=== تم تفعيل ومزامنة قاعدة البيانات بنجاح قطعي ===")
 except Exception as e:
-    print(f"=== خطأ مؤقت أثناء المزامنة: {e} ===")
+    print(f"=== خطأ نظام المزامنة الذاتي: {e} ===")
