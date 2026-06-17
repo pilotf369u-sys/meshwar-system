@@ -7,7 +7,6 @@ BASE_DIR = Path(__file__).resolve().parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'meshwar-super-secret-key-for-testing-only-123')
 
-# تفعيل الـ Debug لرؤية الأخطاء والواجهات بوضوح أثناء ضبط السيرفر
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -24,7 +23,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # لدعم تشغيل الملفات الثابتة والألوان على Render
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -53,11 +52,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wsgi.application'
 
-# إعداد قاعدة البيانات الافتراضي والمستقر المتوافق مع بيئة البناء المغلقة لـ Render
+# تعديل المسار المطلق الثابت لإنهاء خطأ الدوران ومنع قفل الملف
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.abspath(os.path.join(os.path.dirname(__file__), 'db.sqlite3')),
     }
 }
 
